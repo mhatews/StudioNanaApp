@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- MODELOS PADRÃO ---
     const modelosFixos = [
-        'Caixas Milk', 'Caixas Cone', 'Caixas Bala'
+        'Milk', 'Cone', 'Bala'
     ];
 
     // --- FUNÇÕES PRINCIPAIS ---
