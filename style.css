@@ -1,0 +1,537 @@
+/* --- CONFIGURAÇÕES GLOBAIS --- */
+:root {
+    --color-primary: #4CAF50; /* Verde principal */
+    --color-secondary: #D9534F; /* Vermelho/Rosa */
+    --color-background: #f4f7f6;
+    --color-white: #FFFFFF;
+    --color-text: #333;
+    --color-border: #ddd;
+    --font-family: 'Poppins', 'Roboto', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--color-background);
+    color: var(--color-text);
+    line-height: 1.6;
+}
+
+.app-container {
+    display: grid;
+    grid-template-columns: 1fr 350px; /* Coluna principal e sidebar */
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+        "header header"
+        "main sidebar";
+    max-width: 1800px;
+    margin: 20px auto;
+    background-color: var(--color-white);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+/* --- CABEÇALHO --- */
+.app-header {
+    grid-area: header;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid var(--color-border);
+    background-color: #fafafa;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#logo-preview {
+    max-width: 150px;
+    max-height: 70px;
+    object-fit: contain;
+    border-radius: 4px;
+}
+
+.logo-upload-label {
+    cursor: pointer;
+    background-color: #eee;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+.logo-upload-label:hover {
+    background-color: #ddd;
+}
+#logo-upload {
+    display: none;
+}
+
+.company-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-size: 0.9em;
+    line-height: 1.4;
+}
+
+.company-info strong {
+    font-size: 1.2em;
+    color: var(--color-primary);
+}
+
+/* --- CONTEÚDO PRINCIPAL --- */
+.main-content {
+    grid-area: main;
+    padding: 20px;
+}
+
+h1 {
+    color: var(--color-text);
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--color-primary);
+    padding-bottom: 10px;
+}
+
+/* --- FORMULÁRIO --- */
+.form-section {
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.form-section legend {
+    font-size: 1.2em;
+    font-weight: 500;
+    color: var(--color-primary);
+    padding: 0 10px;
+    margin-left: 10px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-weight: 500;
+    font-size: 0.9em;
+}
+
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    font-family: var(--font-family);
+    font-size: 1em;
+}
+
+/* --- TABELA DE ITENS --- */
+#caixas-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+#caixas-table thead {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+}
+
+#caixas-table th,
+#caixas-table td {
+    padding: 12px;
+    border: 1px solid var(--color-border);
+    text-align: left;
+}
+
+#caixas-table th {
+    font-weight: 500;
+}
+
+#caixas-table input[type="text"],
+#caixas-table input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+/* Inputs editáveis na tabela */
+#caixas-tbody input {
+    border: 1px dashed #aaa;
+}
+#caixas-tbody input:focus {
+    outline: 1px solid var(--color-primary);
+    border-style: solid;
+}
+#caixas-table .modelo-fixo-nome {
+    font-weight: 500;
+}
+
+/* --- BOTÕES --- */
+.btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: var(--font-family);
+    font-size: 1em;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+.btn-add {
+    background-color: #e0e0e0;
+    color: #333;
+    margin-top: 15px;
+}
+.btn-add:hover {
+    background-color: #d0d0d0;
+}
+
+.btn-delete-row {
+    background-color: transparent;
+    color: var(--color-secondary);
+    font-size: 1.2em;
+    padding: 5px;
+}
+.btn-delete-row:hover {
+    color: #a93a37;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+.btn-save {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+}
+.btn-save:hover {
+    background-color: #409143;
+}
+.btn-pdf {
+    background-color: var(--color-secondary);
+    color: var(--color-white);
+}
+.btn-pdf:hover {
+    background-color: #a93a37;
+}
+.btn-new {
+    background-color: #007BFF;
+    color: var(--color-white);
+}
+.btn-new:hover {
+    background-color: #0069d9;
+}
+
+
+/* --- SIDEBAR (PEDIDOS SALVOS) --- */
+.sidebar {
+    grid-area: sidebar;
+    padding: 20px;
+    background-color: #fafafa;
+    border-left: 1px solid var(--color-border);
+    overflow-y: auto;
+    max-height: calc(100vh - 135px); /* Altura do header + margem */
+}
+
+.sidebar h2 {
+    color: var(--color-text);
+    margin-bottom: 15px;
+}
+
+#search-pedidos {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+#pedidos-list {
+    list-style: none;
+}
+
+#pedidos-list li {
+    background-color: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.pedido-item-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.pedido-item-info strong {
+    font-size: 1.1em;
+}
+.pedido-item-info span {
+    font-size: 0.85em;
+    color: #666;
+}
+
+.pedido-item-actions {
+    display: flex;
+    gap: 10px;
+}
+.btn-action-sidebar {
+    padding: 6px 10px;
+    font-size: 0.85em;
+    flex-grow: 1;
+}
+.btn-edit { background-color: #ffc107; color: #333; }
+.btn-delete { background-color: var(--color-secondary); color: white; }
+.btn-view-pdf { background-color: #6c757d; color: white; }
+
+
+/* --- MENSAGEM DE TOAST --- */
+#toast-message {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translate(-50%, 150%);
+    padding: 15px 30px;
+    border-radius: 6px;
+    background-color: var(--color-primary);
+    color: white;
+    font-weight: 500;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transition: transform 0.4s ease-in-out;
+    z-index: 1000;
+}
+#toast-message.show {
+    transform: translate(-50%, 0);
+}
+#toast-message.error {
+    background-color: var(--color-secondary);
+}
+
+
+/* --- ESTILOS PARA O PDF (do template oculto) --- */
+.pdf-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+.company-info-pdf {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-size: 12px;
+}
+.company-info-pdf strong {
+    font-size: 16px;
+    color: var(--color-primary);
+}
+.pdf-title {
+    text-align: center;
+    color: #333;
+    font-size: 24px;
+    margin: 20px 0;
+}
+.pdf-client-data {
+    margin: 20px 0;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+.pdf-client-data p {
+    margin: 5px 0;
+}
+.pdf-separator {
+    border: 0;
+    height: 2px;
+    background-color: var(--color-secondary);
+    margin: 25px 0;
+}
+.pdf-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+.pdf-table thead {
+    background-color: var(--color-primary);
+    color: white;
+}
+.pdf-table th, .pdf-table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+.pdf-table th {
+    font-weight: 500;
+}
+
+/* --- RESPONSIVIDADE --- */
+@media (max-width: 1200px) {
+    .app-container {
+        grid-template-columns: 1fr; /* Coluna única */
+        grid-template-areas:
+            "header"
+            "main"
+            "sidebar";
+        margin: 10px;
+    }
+    .sidebar {
+        border-left: none;
+        border-top: 1px solid var(--color-border);
+        max-height: 500px; /* Limita altura no mobile */
+    }
+    .app-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+    .company-info {
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 600px) {
+    .form-grid {
+        grid-template-columns: 1fr; /* Coluna única para inputs */
+    }
+    .action-buttons {
+        flex-direction: column;
+    }
+}
+
+/* --- ESTILOS DO PDF (Baseado na imagem enviada) --- */
+
+.pdf-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 10px;
+}
+
+#logo-pdf {
+    width: 100px; /* Ajuste o tamanho da logo conforme precisar */
+    height: auto;
+    display: none; /* O JS vai mostrar se for carregada */
+}
+
+.company-info-pdf {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-size: 12px;
+    text-align: right;
+    line-height: 1.4;
+}
+.company-info-pdf strong {
+    font-size: 18px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 5px;
+}
+
+.pdf-separator {
+    border: 0;
+    height: 1.5px;
+    background-color: #E53935; /* Vermelho vivo, igual ao da imagem */
+    margin: 15px 0;
+}
+
+.pdf-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #000;
+    margin: 20px 0 15px 0;
+    text-align: left; /* Alinhado à esquerda */
+}
+
+.pdf-client-data {
+    font-size: 14px;
+    line-height: 1.6;
+    text-align: left;
+    border: none; /* Remove a borda da versão anterior */
+    padding: 0; /* Remove o padding da versão anterior */
+}
+.pdf-client-data p {
+    margin: 4px 0;
+}
+.pdf-client-data strong {
+    font-weight: 700;
+    color: #000;
+}
+
+/* Subtítulo "Caixas:" da imagem */
+.pdf-subtitle {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 15px 0 10px 0;
+    text-align: left;
+    color: #000;
+}
+
+.pdf-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+.pdf-table thead {
+    /* Cor verde-água/teal da imagem */
+    background-color: #4DB6AC; 
+    color: white;
+}
+.pdf-table th, 
+.pdf-table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+.pdf-table th {
+    font-weight: 700;
+}
+
+
+/* --- NOVOS ESTILOS --- */
+
+/* Esconde as colunas de Impressão/Camadas da UI */
+.col-hidden {
+    display: none;
+}
+
+/* Melhora o visual do botão de deletar linha */
+.btn-delete-row {
+    background-color: transparent;
+    color: var(--color-secondary);
+    font-size: 1.2em;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+}
+.btn-delete-row:hover {
+    color: #a93a37;
+    background-color: #fbeeee;
+}

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checklist de Pedido – Studio Cantinho da Nana</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div id="toast-message"></div>
+
+    <div class="app-container">
+        
+        <header class="app-header">
+            <div class="logo-container">
+                <img id="logo-preview" src="" alt="Logo" style="display: none;">
+                <label for="logo-upload" class="logo-upload-label">Carregar Logo</label>
+                <input type="file" id="logo-upload" accept="image/*">
+            </div>
+            <div class="company-info">
+                <strong>Studio Cantinho da Nana</strong>
+                <span>Rua Aristides Alves de Oliveira, 94</span>
+                <span>São Pedro da União MG 37855 - 000</span>
+                <span>WHATS: (35) 99903 - 2302</span>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <h1>Checklist de Pedido</h1>
+            
+            <form id="pedido-form">
+                <input type="hidden" id="current-pedido-id">
+
+                <fieldset class="form-section">
+                    <legend>Dados do Cliente</legend>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="nome-cliente">Nome da Cliente</label>
+                            <input type="text" id="nome-cliente" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="nome-crianca">Nome da Criança</label>
+                            <input type="text" id="nome-crianca" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="data-envio">Data de Envio</label>
+                            <input type="date" id="data-envio" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tema">Tema</label>
+                            <input type="text" id="tema" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipo-conta">Tipo de Conta</label>
+                            <select id="tipo-conta" required>
+                                <option value="CP">CP</option>
+                                <option value="CN">CN</option>
+                                <option value="ML">ML</option>
+                                <option value="Outros">Outros</option>
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset class="form-section">
+                    <legend>Itens do Pedido</legend>                 
+                    <table id="caixas-table">
+                        <thead>
+                            <tr>
+                                <th>Modelo de Caixa</th>
+                                <th>Quantidade</th>
+                                <th class="col-hidden">Impressão</th>
+                                <th class="col-hidden">Camadas</th>
+                                <th>Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody id="caixas-tbody">
+                            </tbody>
+                    </table>
+                    <button type="button" id="add-modelo-btn" class="btn btn-add">➕ Adicionar Novo Modelo</button>
+                </fieldset>
+
+                <div class="action-buttons">
+                    <button type="submit" class="btn btn-save">💾 Salvar Pedido</button>
+                    <button type="button" id="gerar-pdf-btn" class="btn btn-pdf">📄 Gerar PDF</button>
+                    <button type="button" id="novo-pedido-btn" class="btn btn-new">✨ Novo Pedido</button>
+                </div>
+            </form>
+        </main>
+
+        <aside class="sidebar">
+            <h2>Pedidos Salvos</h2>
+            <input type="search" id="search-pedidos" placeholder="Buscar por nome da cliente...">
+            <ul id="pedidos-list">
+                </ul>
+        </aside>
+
+    </div>
+
+    <script src="jspdf.umd.min.js"></script>
+    <script src="jspdf.plugin.autotable.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
