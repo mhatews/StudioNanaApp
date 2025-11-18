@@ -278,7 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const img = new Image();
                     img.src = logoDataUrl;
                     // Tenta manter a proporção, com max-width de 120pt
-                    const imgWidth = Math.min(120, img.width); 
+                    const imgWidth = Math.min(80, img.width); 
                     const imgHeight = (img.height * imgWidth) / img.width;
                     doc.addImage(logoDataUrl, 'PNG', margin, cursorY, imgWidth, imgHeight);
                 } catch (e) {
