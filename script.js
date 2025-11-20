@@ -20,8 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- MODELOS PADRÃO ---
     const modelosFixos = [
-        'Caixas Milk', 'Caixas Cone', 'Caixas Bala', 
-        'Caixas Celeiro', 'Caixas Regador', 'Caixas TV', 'Caixas Casinha'
+        'Milk', 'Cone', 'Bala'
     ];
 
     // --- FUNÇÕES PRINCIPAIS ---
