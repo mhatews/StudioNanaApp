@@ -535,3 +535,15 @@ h1 {
     color: #a93a37;
     background-color: #fbeeee;
 }
+
+/* Botão de Imprimir Todos na Sidebar */
+.btn-print-all {
+    background-color: #673AB7; /* Roxo */
+    color: white;
+    font-size: 0.9em;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.btn-print-all:hover {
+    background-color: #512DA8;
+}
