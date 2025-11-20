@@ -6,9 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const addModeloBtn = document.getElementById('add-modelo-btn');
     const novoPedidoBtn = document.getElementById('novo-pedido-btn');
     const gerarPdfBtn = document.getElementById('gerar-pdf-btn');
+    const btnPdfTodos = document.getElementById('btn-pdf-todos'); // Botão PDF Geral
     
-    // Novo Seletor
-    const btnPdfTodos = document.getElementById('btn-pdf-todos');
+    // Seletor de Empresa
+    const empresaSelect = document.getElementById('empresa-select');
 
     const pedidosList = document.getElementById('pedidos-list');
     const searchPedidos = document.getElementById('search-pedidos');
@@ -19,18 +20,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- MODELOS PADRÃO ---
     const modelosFixos = [
-        'Milk', 'Cone', 'Bala'
+        'Caixas Milk', 'Caixas Cone', 'Caixas Bala', 
+        'Caixas Celeiro', 'Caixas Regador', 'Caixas TV', 'Caixas Casinha'
     ];
 
     // --- FUNÇÕES PRINCIPAIS ---
 
+    /**
+     * Carrega os modelos fixos na tabela.
+     */
     function loadDefaultModels() {
-        caixasTbody.innerHTML = ''; 
+        caixasTbody.innerHTML = ''; // Limpa tabela
         modelosFixos.forEach(modelo => {
             addCaixaRow(modelo, '', '', '', true);
         });
     }
 
+    /**
+     * Adiciona uma nova linha de modelo de caixa à tabela.
+     */
     function addCaixaRow(modelo = '', qtd = '', impressao = '', camadas = '', isFixo = false) {
         const tr = document.createElement('tr');
         
@@ -38,21 +46,24 @@ document.addEventListener('DOMContentLoaded', () => {
             ? `<span class="modelo-fixo-nome">${modelo}</span><input type="hidden" class="modelo-caixa" value="${modelo}">`
             : `<input type="text" class="modelo-caixa" value="${modelo}" placeholder="Nome do Modelo" required>`;
         
-        // Botão de remover para TODOS
+        // Botão de remover para TODOS os itens
         const acaoHTML = `<td><button type="button" class="btn btn-delete-row" title="Remover este item">🗑️</button></td>`;
 
         tr.innerHTML = `
             <td>${modeloHTML}</td>
             <td><input type="number" class="qtd-caixa" value="${qtd}" min="0"></td>
+            
             <td class="col-hidden">
                 <input type="hidden" class="impressao-caixa" value="${impressao || ''}">
             </td>
             <td class="col-hidden">
                 <input type="hidden" class="camadas-caixa" value="${camadas || ''}">
             </td>
+            
             ${acaoHTML}
         `;
 
+        // Evento de remover linha
         tr.querySelector('.btn-delete-row').addEventListener('click', () => {
             tr.remove();
         });
@@ -60,6 +71,9 @@ document.addEventListener('DOMContentLoaded', () => {
         caixasTbody.appendChild(tr);
     }
 
+    /**
+     * Salva ou atualiza um pedido no localStorage.
+     */
     function savePedido() {
         const id = currentPedidoId.value || `pedido_${Date.now()}`;
         
@@ -70,6 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const impressao = tr.querySelector('.impressao-caixa').value;
             const camadas = tr.querySelector('.camadas-caixa').value;
             
+            // Só salva se tiver um modelo definido
             if (modelo) {
                 caixas.push({ modelo, qtd, impressao, camadas });
             }
@@ -90,9 +105,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const existingIndex = pedidos.findIndex(p => p.id === id);
 
         if (existingIndex > -1) {
-            pedidos[existingIndex] = pedido; 
+            pedidos[existingIndex] = pedido; // Atualiza
         } else {
-            pedidos.push(pedido); 
+            pedidos.push(pedido); // Adiciona novo
         }
 
         localStorage.setItem('pedidosStudioNana', JSON.stringify(pedidos));
@@ -101,6 +116,9 @@ document.addEventListener('DOMContentLoaded', () => {
         loadPedidosList();
     }
 
+    /**
+     * Carrega a lista de pedidos salvos do localStorage.
+     */
     function loadPedidosList() {
         const pedidos = getPedidosFromStorage();
         const filter = searchPedidos.value.toLowerCase();
@@ -108,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const pedidosFiltrados = pedidos
             .filter(p => p.cliente.toLowerCase().includes(filter))
-            .sort((a, b) => new Date(b.dataSalvo) - new Date(a.dataSalvo));
+            .sort((a, b) => new Date(b.dataSalvo) - new Date(a.dataSalvo)); // Mais recentes primeiro
 
         pedidosFiltrados.forEach(pedido => {
             const li = document.createElement('li');
@@ -127,6 +145,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    /**
+     * Carrega um pedido existente no formulário para edição.
+     */
     function loadPedidoForEdit(id) {
         const pedido = getPedidoById(id);
         if (!pedido) return;
@@ -138,13 +159,16 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('tema').value = pedido.tema;
         document.getElementById('tipo-conta').value = pedido.tipoConta;
 
-        caixasTbody.innerHTML = ''; 
+        caixasTbody.innerHTML = ''; // Limpa tabela
         pedido.caixas.forEach(caixa => {
             const isFixo = modelosFixos.includes(caixa.modelo);
             addCaixaRow(caixa.modelo, caixa.qtd, caixa.impressao, caixa.camadas, isFixo);
         });
     }
 
+    /**
+     * Exclui um pedido do localStorage.
+     */
     function deletePedido(id) {
         if (!confirm('Tem certeza que deseja excluir este pedido?')) {
             return;
@@ -159,6 +183,9 @@ document.addEventListener('DOMContentLoaded', () => {
         loadPedidosList();
     }
 
+    /**
+     * Limpa o formulário.
+     */
     function clearForm() {
         pedidoForm.reset();
         currentPedidoId.value = '';
@@ -167,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /**
      * FUNÇÃO HELPER: Desenha UM pedido na página atual do PDF.
-     * Não salva o arquivo, apenas desenha no objeto 'doc' passado.
+     * Responsável por todo o layout visual (Logo, Textos, Tabela).
      */
     function drawOrderOnPage(doc, pedido) {
         const margin = 40; 
@@ -176,13 +203,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const redColor = [229, 57, 53];
         const tableHeaderColor = [77, 182, 172];
 
+        // --- NOVO: Pega o nome da empresa selecionado no momento ---
+        const empresaNome = document.getElementById('empresa-select').value;
+
         // 1. Logo
         const logoDataUrl = localStorage.getItem('logoStudioNana');
         if (logoDataUrl) {
             try {
                 const img = new Image();
                 img.src = logoDataUrl;
-                const maxLogoWidth = 80; // Mantido 80 como solicitado
+                // Tamanho máximo reduzido para 80, conforme solicitado
+                const maxLogoWidth = 80; 
                 const imgWidth = Math.min(maxLogoWidth, img.width); 
                 const imgHeight = (img.height * imgWidth) / img.width;
                 doc.addImage(logoDataUrl, 'PNG', margin, cursorY, imgWidth, imgHeight);
@@ -191,11 +222,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // 2. Cabeçalho Texto
+        // 2. Cabeçalho Texto (Informações da Empresa)
         const companyInfoX = pageWidth - margin;
         doc.setFont("helvetica", "bold");
         doc.setFontSize(11);
-        doc.text("Studio Cantinho da Nana", companyInfoX, cursorY + 10, { align: 'right' });
+        
+        // Usa o nome da empresa selecionada
+        doc.text(empresaNome, companyInfoX, cursorY + 10, { align: 'right' });
 
         doc.setFont("helvetica", "normal");
         doc.setFontSize(10);
@@ -205,13 +238,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         cursorY += 80;
 
-        // 3. Linha Vermelha
+        // 3. Linha Vermelha Superior
         doc.setDrawColor(redColor[0], redColor[1], redColor[2]);
         doc.setLineWidth(1.5);
         doc.line(margin, cursorY, pageWidth - margin, cursorY);
         cursorY += 20;
 
-        // 4. Título e Dados
+        // 4. Título e Dados do Cliente
         doc.setFont("helvetica", "bold");
         doc.setFontSize(16);
         doc.text("Checklist de Pedido", margin, cursorY);
@@ -233,6 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
         doc.text(`Tipo de Conta: ${pedido.tipoConta}`, margin, cursorY);
         cursorY += 25;
 
+        // 5. Subtítulo "Caixas:" e Linha
         doc.setFont("helvetica", "bold");
         doc.setFontSize(12);
         doc.text("Caixas:", margin, cursorY);
@@ -242,7 +276,8 @@ document.addEventListener('DOMContentLoaded', () => {
         doc.setLineWidth(1.5);
         doc.line(margin, cursorY - 8, pageWidth - margin, cursorY - 8);
 
-        // 5. Tabela
+        // 6. Tabela
+        // Monta os dados da tabela
         const head = [['Modelo de Caixa', 'Quantidade', 'Impressão', 'Camadas']];
         const body = pedido.caixas.map(caixa => [
             caixa.modelo,
@@ -274,7 +309,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Gera PDF Individual
+     * Gera PDF Individual (Do formulário ou de um pedido salvo)
      */
     function generatePDF(id = null) {
         let pedido;
@@ -286,6 +321,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
         } else {
+            // Pega dados do formulário atual
             const clienteNome = document.getElementById('nome-cliente').value;
             if (!clienteNome) {
                 showToast('Preencha o nome da cliente para gerar o PDF.', 'error');
@@ -321,7 +357,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF("p", "pt", "a4");
             
-            // Usa a função helper para desenhar
+            // Desenha o pedido
             drawOrderOnPage(doc, pedido);
 
             const nomeArquivo = `${pedido.cliente.replace(/ /g, '_') || 'pedido'}.pdf`;
@@ -335,7 +371,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * NOVO: Gera PDF com TODOS os pedidos salvos
+     * Gera PDF com TODOS os pedidos salvos
      */
     function generateAllOrdersPDF() {
         const pedidos = getPedidosFromStorage();
@@ -350,15 +386,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF("p", "pt", "a4");
 
-            // Ordena por data (opcional, mas bom)
+            // Ordena por data de envio (ou salvamento)
             pedidos.sort((a, b) => new Date(b.dataSalvo) - new Date(a.dataSalvo));
 
             pedidos.forEach((pedido, index) => {
-                // Adiciona nova página se não for o primeiro pedido
+                // Adiciona nova página se não for o primeiro
                 if (index > 0) {
                     doc.addPage();
                 }
-                // Desenha o pedido na página atual
+                // Desenha o pedido na página
                 drawOrderOnPage(doc, pedido);
             });
 
@@ -417,6 +453,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- EVENT LISTENERS ---
+    
     pedidoForm.addEventListener('submit', (e) => {
         e.preventDefault();
         savePedido();
@@ -431,8 +468,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     novoPedidoBtn.addEventListener('click', clearForm);
     gerarPdfBtn.addEventListener('click', () => generatePDF(null));
-    
-    // LISTENER DO NOVO BOTÃO
     btnPdfTodos.addEventListener('click', generateAllOrdersPDF);
 
     searchPedidos.addEventListener('input', loadPedidosList);
@@ -454,8 +489,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     logoUpload.addEventListener('change', handleLogoUpload);
 
+    // Listener para salvar a escolha da empresa
+    empresaSelect.addEventListener('change', () => {
+        localStorage.setItem('empresaSelecionada', empresaSelect.value);
+    });
+
     // --- INICIALIZAÇÃO ---
     loadDefaultModels();
     loadPedidosList();
     loadLogo();
+
+    // Carrega a empresa salva
+    const empresaSalva = localStorage.getItem('empresaSelecionada');
+    if (empresaSalva) {
+        empresaSelect.value = empresaSalva;
+    }
 });

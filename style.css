@@ -547,3 +547,36 @@ h1 {
 .btn-print-all:hover {
     background-color: #512DA8;
 }
+
+/* Estilo para o Seletor de Empresa no Cabeçalho */
+.company-title-select {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.2em; /* Mesmo tamanho do antigo strong */
+    font-weight: 700; /* Negrito */
+    color: var(--color-primary); /* Verde */
+    border: 1px solid transparent;
+    background-color: transparent;
+    text-align: right;
+    cursor: pointer;
+    padding: 2px 5px;
+    border-radius: 4px;
+    margin-bottom: 5px;
+    
+    /* Alinha o texto do select à direita */
+    direction: rtl; 
+}
+
+.company-title-select:hover {
+    border-color: var(--color-border);
+    background-color: #f0f0f0;
+}
+
+.company-title-select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+/* Garante que as opções dentro do menu fiquem legíveis (ltr) */
+.company-title-select option {
+    direction: ltr;
+}
