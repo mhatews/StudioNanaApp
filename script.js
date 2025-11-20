@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- MODELOS PADRÃO ---
     const modelosFixos = [
-        'Milk', 'Cone', 'Bala'
+        'Milk', 'Cone', 'Bala',
     ];
 
     // --- FUNÇÕES PRINCIPAIS ---
